@@ -1,0 +1,18 @@
+---
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1" # weekly rebuild-all (Mon 06:00 UTC); adjust to taste
+  workflow_dispatch:
+
+jobs:
+  images:
+    permissions:
+      contents: read
+      packages: write
+    uses: bendwyer/github-workflows/.github/workflows/coder-image-build-push.yml@main
