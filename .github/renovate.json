@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "dependencyDashboard": false,
+  "prHourlyLimit": 0,
+  "labels": ["dependencies"],
+  "rebaseWhen": "behind-base-branch",
+  "separateMinorPatch": true,
+  "github-actions": { "enabled": false },
+  "customManagers": [
+    {
+      "description": "Track the Claude Code CLI version pinned in the coder-base image.",
+      "customType": "regex",
+      "managerFilePatterns": ["/images/coder-base/Dockerfile$/"],
+      "matchStrings": [
+        "ARG CLAUDE_CODE_VERSION=(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "claude-code",
+      "datasourceTemplate": "deb",
+      "registryUrlTemplate": "https://downloads.claude.ai/claude-code/apt/stable?suite=stable&components=main&binaryArch=amd64"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Automerge minor+patch for the Claude Code CLI.",
+      "matchDatasources": ["deb"],
+      "matchPackageNames": ["claude-code"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    }
+  ]
+}
