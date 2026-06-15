@@ -17,7 +17,7 @@
       ],
       "depNameTemplate": "claude-code",
       "datasourceTemplate": "deb",
-      "registryUrlTemplate": "https://downloads.claude.ai/claude-code/apt/stable?suite=stable&components=main&binaryArch=amd64"
+      "registryUrlTemplate": "https://downloads.claude.ai/claude-code/apt/latest?suite=latest&components=main&binaryArch=amd64"
     }
   ],
   "packageRules": [
