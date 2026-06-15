@@ -37,6 +37,20 @@ RUN apt-get update \
   && locale-gen \
   && rm -rf /var/lib/apt/lists/*
 
+# Claude Code CLI from Anthropic's signed apt repo. apt puts it on a system path
+# (so it survives the home volume mount) and, unlike the native installer, it does
+# not background-auto-update, so the image is the version of record. Pinned;
+# Renovate bumps CLAUDE_CODE_VERSION.
+ARG CLAUDE_CODE_VERSION=2.1.109-1
+RUN install -d -m 0755 /etc/apt/keyrings \
+  && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
+       -o /etc/apt/keyrings/claude-code.asc \
+  && echo "deb [signed-by=/etc/apt/keyrings/claude-code.asc] https://downloads.claude.ai/claude-code/apt/stable stable main" \
+       > /etc/apt/sources.list.d/claude-code.list \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends "claude-code=${CLAUDE_CODE_VERSION}" \
+  && rm -rf /var/lib/apt/lists/*
+
 # Non-root `coder` user with passwordless sudo, matching the template's
 # run_as_user / fs_group of 1000 and its /home/coder mount.
 RUN groupadd --gid ${USER_GID} ${USERNAME} \
