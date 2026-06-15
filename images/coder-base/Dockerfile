@@ -41,7 +41,7 @@ RUN apt-get update \
 # (so it survives the home volume mount) and, unlike the native installer, it does
 # not background-auto-update, so the image is the version of record. Pinned;
 # Renovate bumps CLAUDE_CODE_VERSION.
-ARG CLAUDE_CODE_VERSION=2.1.109-1
+ARG CLAUDE_CODE_VERSION=2.1.153-1
 RUN install -d -m 0755 /etc/apt/keyrings \
   && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
        -o /etc/apt/keyrings/claude-code.asc \
