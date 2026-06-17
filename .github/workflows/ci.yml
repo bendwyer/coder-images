@@ -16,3 +16,11 @@ jobs:
       contents: read
       packages: write
     uses: bendwyer/github-workflows/.github/workflows/coder-image-build-push.yml@main
+
+  check:
+    if: always()
+    needs:
+      - images
+    uses: bendwyer/github-workflows/.github/workflows/github-check.yml@main
+    with:
+      jobs: ${{ toJSON(needs) }}
