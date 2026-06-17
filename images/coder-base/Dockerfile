@@ -41,6 +41,22 @@ RUN install -d -m 0755 /etc/apt/keyrings \
   && apt-get install -y --no-install-recommends "claude-code=${CLAUDE_CODE_VERSION}" \
   && rm -rf /var/lib/apt/lists/*
 
+# mise: lightweight tool-version manager. Tools are NOT baked here; the workspace
+# installs them per-project (.tool-versions/mise.toml) or on demand (`mise use`)
+# into the home PVC. Bare static binary at a system path so the home mount can't
+# shadow it. Renovate bumps the pin (jdx/mise releases).
+ARG MISE_VERSION=v2026.6.11
+RUN arch="$(dpkg --print-architecture)" \
+  && case "${arch}" in \
+       amd64) march=x64 ;; \
+       arm64) march=arm64 ;; \
+       *) echo "unsupported arch: ${arch}" >&2; exit 1 ;; \
+     esac \
+  && curl -fsSL "https://github.com/jdx/mise/releases/download/${MISE_VERSION}/mise-${MISE_VERSION}-linux-${march}" \
+       -o /usr/local/bin/mise \
+  && chmod 0755 /usr/local/bin/mise \
+  && mise --version
+
 # Non-root `coder` user with passwordless sudo; UID/GID 1000 matches the template.
 RUN groupadd --gid ${USER_GID} ${USERNAME} \
   && useradd --uid ${USER_UID} --gid ${USER_GID} --create-home --shell /bin/bash ${USERNAME} \
@@ -49,6 +65,10 @@ RUN groupadd --gid ${USER_GID} ${USERNAME} \
 
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
+
+# mise shims + ~/.local/bin on PATH so non-interactive shells (e.g. Claude Code's
+# `bash -c`) resolve mise-managed and on-demand tools, not just interactive ones.
+ENV PATH="/home/${USERNAME}/.local/share/mise/shims:/home/${USERNAME}/.local/bin:${PATH}"
 
 USER ${USERNAME}
 WORKDIR /home/${USERNAME}
