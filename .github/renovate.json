@@ -18,6 +18,16 @@
       "depNameTemplate": "claude-code",
       "datasourceTemplate": "deb",
       "registryUrlTemplate": "https://downloads.claude.ai/claude-code/apt/latest?suite=latest&components=main&binaryArch=amd64"
+    },
+    {
+      "description": "Track the mise version pinned in the coder-base image.",
+      "customType": "regex",
+      "managerFilePatterns": ["/images/coder-base/Dockerfile$/"],
+      "matchStrings": [
+        "ARG MISE_VERSION=(?<currentValue>\\S+)"
+      ],
+      "depNameTemplate": "jdx/mise",
+      "datasourceTemplate": "github-releases"
     }
   ],
   "packageRules": [
@@ -25,6 +35,13 @@
       "description": "Automerge minor+patch for the Claude Code CLI.",
       "matchDatasources": ["deb"],
       "matchPackageNames": ["claude-code"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Automerge minor+patch for mise.",
+      "matchDatasources": ["github-releases"],
+      "matchPackageNames": ["jdx/mise"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     }
