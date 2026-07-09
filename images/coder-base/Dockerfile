@@ -45,7 +45,7 @@ RUN install -d -m 0755 /etc/apt/keyrings \
 # installs them per-project (.tool-versions/mise.toml) or on demand (`mise use`)
 # into the home PVC. Bare static binary at a system path so the home mount can't
 # shadow it. Renovate bumps the pin (jdx/mise releases).
-ARG MISE_VERSION=v2026.7.2
+ARG MISE_VERSION=v2026.7.3
 RUN arch="$(dpkg --print-architecture)" \
   && case "${arch}" in \
        amd64) march=x64 ;; \
