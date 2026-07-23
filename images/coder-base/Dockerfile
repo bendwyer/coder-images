@@ -31,7 +31,7 @@ RUN apt-get update \
 
 # Claude Code CLI, latest apt channel (stable lags too far for current models).
 # A system path so the home-volume mount can't shadow it. Renovate bumps the pin.
-ARG CLAUDE_CODE_VERSION=2.1.217-1
+ARG CLAUDE_CODE_VERSION=2.1.218-1
 RUN install -d -m 0755 /etc/apt/keyrings \
   && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
        -o /etc/apt/keyrings/claude-code.asc \
