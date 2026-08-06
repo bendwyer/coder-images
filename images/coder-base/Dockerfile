@@ -12,6 +12,8 @@ ARG USER_GID=1000
 ENV DEBIAN_FRONTEND=noninteractive
 
 # apt resolves the arch, so this layer is multi-arch with no per-arch handling.
+# tmux is here so a Claude Code Remote Control session can outlive the terminal
+# that started it, which ends the session otherwise.
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     bash \
@@ -23,6 +25,7 @@ RUN apt-get update \
     locales \
     openssh-client \
     sudo \
+    tmux \
     unzip \
     wget \
   && sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
