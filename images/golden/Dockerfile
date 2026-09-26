@@ -4,7 +4,7 @@
 
 # Pinned by digest so a base publish reaches this image through a
 # Renovate bump, not by whichever base happened to be current at build time.
-FROM ghcr.io/bendwyer/coder-images/base:2026.9.26@sha256:a6c7ad183977c9ac9ec3c0dbb5a7b3f163b93bf0c2bf84e2c9273da4fcfdb8d5
+FROM ghcr.io/bendwyer/coder-images/base:2026.9.26@sha256:9d6b45abca17723a320e127a37baf8325f8c23c7be9446f7a78f1ac4e1261147
 
 ARG TARGETARCH
 
