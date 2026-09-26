@@ -15,10 +15,10 @@
   },
   "customManagers": [
     {
-      "description": "Track the Claude Code CLI version pinned in the coder-base image.",
+      "description": "Track the Claude Code CLI version pinned in the base image.",
       "customType": "regex",
       "managerFilePatterns": [
-        "/images/coder-base/Dockerfile$/"
+        "/images/base/Dockerfile$/"
       ],
       "matchStrings": [
         "ARG CLAUDE_CODE_VERSION=(?<currentValue>\\S+)"

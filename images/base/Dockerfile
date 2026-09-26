@@ -1,4 +1,4 @@
-# coder-base: foundational multi-arch image for Coder Kubernetes workspaces.
+# base: foundational multi-arch image for Coder Kubernetes workspaces.
 # Provides a non-root `coder` user (UID/GID 1000, passwordless sudo) and the
 # minimum needed to bootstrap one. The agent, the editor and the workspace's
 # selected CLI tools all arrive at start, into the home PVC.
