@@ -1,6 +1,6 @@
 # golden: the general-purpose workspace image. base plus the tools every
-# workspace uses regardless of which repos it clones. Anything a particular
-# repo needs belongs in that repo's mise.toml, not here.
+# workspace uses regardless of which repos it clones, including mise, which
+# installs what each repo declares in its mise.toml.
 
 # Pinned by digest so a base publish reaches this image through a
 # Renovate bump, not by whichever base happened to be current at build time.
@@ -18,6 +18,8 @@ ARG SOPS_VERSION=3.13.3
 ARG AGE_VERSION=1.3.2
 # renovate: datasource=custom.onepassword-cli depName=op
 ARG OP_VERSION=2.39.0
+# renovate: datasource=github-releases depName=jdx/mise
+ARG MISE_VERSION=2026.9.14
 
 USER root
 
@@ -39,9 +41,11 @@ RUN install -d -m 0755 /etc/apt/keyrings \
   && apt-get install -y --no-install-recommends "claude-code=${CLAUDE_CODE_VERSION}" \
   && rm -rf /var/lib/apt/lists/*
 
-# Every upstream here spells the arch the same way Docker's TARGETARCH does.
+# Every upstream here but mise spells the arch the same way Docker's TARGETARCH does.
 RUN set -eux; \
   cd /tmp; \
+  case "${TARGETARCH}" in amd64) mise_arch=x64 ;; *) mise_arch="${TARGETARCH}" ;; esac; \
+  curl -fsSL -o /usr/local/bin/mise "https://github.com/jdx/mise/releases/download/v${MISE_VERSION}/mise-v${MISE_VERSION}-linux-${mise_arch}"; \
   curl -fsSL "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_${TARGETARCH}.tar.gz" \
     | tar -xz --strip-components=2 -C /usr/local/bin "gh_${GH_VERSION}_linux_${TARGETARCH}/bin/gh"; \
   curl -fsSL -o /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH}"; \
@@ -51,7 +55,7 @@ RUN set -eux; \
   curl -fsSL -o op.zip "https://cache.agilebits.com/dist/1P/op2/pkg/v${OP_VERSION}/op_linux_${TARGETARCH}_v${OP_VERSION}.zip"; \
   unzip -q op.zip op -d /usr/local/bin; \
   rm op.zip; \
-  chmod 0755 /usr/local/bin/gh /usr/local/bin/yq /usr/local/bin/sops /usr/local/bin/age /usr/local/bin/age-keygen /usr/local/bin/op; \
-  gh --version; yq --version; sops --version; age --version; op --version
+  chmod 0755 /usr/local/bin/gh /usr/local/bin/yq /usr/local/bin/sops /usr/local/bin/age /usr/local/bin/age-keygen /usr/local/bin/op /usr/local/bin/mise; \
+  gh --version; yq --version; sops --version; age --version; op --version; mise --version
 
 USER coder
