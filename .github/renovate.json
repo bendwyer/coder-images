@@ -1,32 +1,109 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
   "dependencyDashboard": false,
   "prHourlyLimit": 0,
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "rebaseWhen": "behind-base-branch",
   "separateMinorPatch": true,
-  "github-actions": { "enabled": false },
+  "github-actions": {
+    "enabled": false
+  },
   "customManagers": [
     {
       "description": "Track the Claude Code CLI version pinned in the coder-base image.",
       "customType": "regex",
-      "managerFilePatterns": ["/images/coder-base/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/images/coder-base/Dockerfile$/"
+      ],
       "matchStrings": [
         "ARG CLAUDE_CODE_VERSION=(?<currentValue>\\S+)"
       ],
       "depNameTemplate": "claude-code",
       "datasourceTemplate": "deb",
       "registryUrlTemplate": "https://downloads.claude.ai/claude-code/apt/latest?suite=latest&components=main&binaryArch=amd64"
+    },
+    {
+      "description": "Track the CLI tool versions pinned as ARGs in the workspace images.",
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/images/[^/]+/Dockerfile$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+ARG \\w+_VERSION=(?<currentValue>\\S+)"
+      ]
     }
   ],
   "packageRules": [
     {
       "description": "Automerge minor+patch for the Claude Code CLI.",
-      "matchDatasources": ["deb"],
-      "matchPackageNames": ["claude-code"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchDatasources": [
+        "deb"
+      ],
+      "matchPackageNames": [
+        "claude-code"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "automerge": true
+    },
+    {
+      "description": "Order CalVer YYYY.M.D tags for the coder-base pin in derived images.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/bendwyer/coder-images/coder-base"
+      ],
+      "versioning": "semver-coerced",
+      "automerge": true
+    },
+    {
+      "description": "Group the golden image tool bumps into one weekly PR, since each one rebuilds the image.",
+      "matchFileNames": [
+        "images/golden/Dockerfile"
+      ],
+      "matchDatasources": [
+        "github-releases",
+        "custom.onepassword-cli"
+      ],
+      "groupName": "golden image tools",
+      "schedule": [
+        "before 6am on monday"
+      ]
+    },
+    {
+      "description": "Automerge patch+minor for >=1.x image tools.",
+      "matchDatasources": [
+        "github-releases",
+        "custom.onepassword-cli"
+      ],
+      "matchCurrentVersion": "/^v?[1-9]/",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "The page lists every platform, so take the version from the linux zip only.",
+      "matchDatasources": [
+        "custom.onepassword-cli"
+      ],
+      "extractVersion": "op_linux_amd64_v(?<version>[^\"]+)\\.zip$"
     }
-  ]
+  ],
+  "customDatasources": {
+    "onepassword-cli": {
+      "description": "1Password publishes no releases API, and their release feed is XML, which custom datasources cannot parse. This page carries download URLs as anchors, which the html format reads.",
+      "defaultRegistryUrlTemplate": "https://app-updates.agilebits.com/product_history/CLI2",
+      "format": "html"
+    }
+  }
 }
