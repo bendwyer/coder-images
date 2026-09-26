@@ -16,6 +16,8 @@ jobs:
       contents: read
       packages: write
     uses: bendwyer/github-workflows/.github/workflows/coder-image-build-push.yml@main
+    with:
+      base_image: base
 
   check:
     if: always()
