@@ -1,10 +1,10 @@
-# golden: the general-purpose workspace image. coder-base plus the tools every
+# golden: the general-purpose workspace image. base plus the tools every
 # workspace uses regardless of which repos it clones. Anything a particular
 # repo needs belongs in that repo's mise.toml, not here.
 
-# Pinned by digest so a coder-base publish reaches this image through a
+# Pinned by digest so a base publish reaches this image through a
 # Renovate bump, not by whichever base happened to be current at build time.
-FROM ghcr.io/bendwyer/coder-images/coder-base:2026.9.26@sha256:546024e95f81a7aa0727dc802fa793e253d0b4611178e4e690cf79c3442e1e23
+FROM ghcr.io/bendwyer/coder-images/base:2026.9.26@sha256:a6c7ad183977c9ac9ec3c0dbb5a7b3f163b93bf0c2bf84e2c9273da4fcfdb8d5
 
 ARG TARGETARCH
 
@@ -20,6 +20,24 @@ ARG AGE_VERSION=1.3.2
 ARG OP_VERSION=2.39.0
 
 USER root
+
+# tmux lets a Claude Code Remote Control session outlive the terminal that
+# started it, which ends the session otherwise.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends tmux \
+  && rm -rf /var/lib/apt/lists/*
+
+# Claude Code CLI, latest apt channel (stable lags too far for current models).
+# A system path so the home-volume mount can't shadow it. Renovate bumps the pin.
+ARG CLAUDE_CODE_VERSION=2.1.283-1
+RUN install -d -m 0755 /etc/apt/keyrings \
+  && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
+       -o /etc/apt/keyrings/claude-code.asc \
+  && echo "deb [signed-by=/etc/apt/keyrings/claude-code.asc] https://downloads.claude.ai/claude-code/apt/latest latest main" \
+       > /etc/apt/sources.list.d/claude-code.list \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends "claude-code=${CLAUDE_CODE_VERSION}" \
+  && rm -rf /var/lib/apt/lists/*
 
 # Every upstream here spells the arch the same way Docker's TARGETARCH does.
 RUN set -eux; \

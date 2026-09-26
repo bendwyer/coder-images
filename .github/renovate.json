@@ -15,10 +15,10 @@
   },
   "customManagers": [
     {
-      "description": "Track the Claude Code CLI version pinned in the base image.",
+      "description": "Track the Claude Code CLI version pinned in the golden image.",
       "customType": "regex",
       "managerFilePatterns": [
-        "/images/base/Dockerfile$/"
+        "/images/golden/Dockerfile$/"
       ],
       "matchStrings": [
         "ARG CLAUDE_CODE_VERSION=(?<currentValue>\\S+)"
@@ -54,12 +54,12 @@
       "automerge": true
     },
     {
-      "description": "Order CalVer YYYY.M.D tags for the coder-base pin in derived images.",
+      "description": "Order CalVer YYYY.M.D tags for the base pin in derived images.",
       "matchDatasources": [
         "docker"
       ],
       "matchPackageNames": [
-        "ghcr.io/bendwyer/coder-images/coder-base"
+        "ghcr.io/bendwyer/coder-images/base"
       ],
       "versioning": "semver-coerced",
       "automerge": true
