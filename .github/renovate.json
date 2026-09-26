@@ -65,18 +65,11 @@
       "automerge": true
     },
     {
-      "description": "Group the golden image tool bumps into one weekly PR, since each one rebuilds the image.",
+      "description": "One group for everything the golden image pins (tools, Claude Code and the base digest), so the updates one run finds rebuild it once rather than once per dependency. No schedule, matching the Flux repos: updates land on the next run.",
       "matchFileNames": [
         "images/golden/Dockerfile"
       ],
-      "matchDatasources": [
-        "github-releases",
-        "custom.onepassword-cli"
-      ],
-      "groupName": "golden image tools",
-      "schedule": [
-        "before 6am on monday"
-      ]
+      "groupName": "golden image"
     },
     {
       "description": "Automerge patch+minor for >=1.x image tools.",
