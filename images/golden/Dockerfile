@@ -9,7 +9,7 @@ FROM ghcr.io/bendwyer/coder-images/base:2026.9.28@sha256:9d6b45abca17723a320e127
 ARG TARGETARCH
 
 # renovate: datasource=github-releases depName=cli/cli
-ARG GH_VERSION=2.101.0
+ARG GH_VERSION=2.102.0
 # renovate: datasource=github-releases depName=mikefarah/yq
 ARG YQ_VERSION=4.54.1
 # renovate: datasource=github-releases depName=getsops/sops
