@@ -17,7 +17,7 @@ ARG SOPS_VERSION=3.13.3
 # renovate: datasource=github-releases depName=FiloSottile/age
 ARG AGE_VERSION=1.3.2
 # renovate: datasource=custom.onepassword-cli depName=op
-ARG OP_VERSION=2.39.0
+ARG OP_VERSION=2.40.0
 # renovate: datasource=github-releases depName=jdx/mise
 ARG MISE_VERSION=2026.10.0
 
