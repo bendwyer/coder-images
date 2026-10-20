@@ -9,7 +9,7 @@ FROM ghcr.io/bendwyer/coder-images/base:2026.10.19@sha256:3e42f996772475fb7199ab
 ARG TARGETARCH
 
 # renovate: datasource=github-releases depName=cli/cli
-ARG GH_VERSION=2.102.0
+ARG GH_VERSION=2.102.1
 # renovate: datasource=github-releases depName=mikefarah/yq
 ARG YQ_VERSION=4.54.1
 # renovate: datasource=github-releases depName=getsops/sops
@@ -31,7 +31,7 @@ RUN apt-get update \
 
 # Claude Code CLI, latest apt channel (stable lags too far for current models).
 # A system path so the home-volume mount can't shadow it. Renovate bumps the pin.
-ARG CLAUDE_CODE_VERSION=2.1.304-1
+ARG CLAUDE_CODE_VERSION=2.1.305-1
 RUN install -d -m 0755 /etc/apt/keyrings \
   && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
        -o /etc/apt/keyrings/claude-code.asc \
