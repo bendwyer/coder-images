@@ -17,7 +17,7 @@ ARG SOPS_VERSION=3.13.3
 # renovate: datasource=github-releases depName=FiloSottile/age
 ARG AGE_VERSION=1.3.2
 # renovate: datasource=custom.onepassword-cli depName=op
-ARG OP_VERSION=2.41.0
+ARG OP_VERSION=2.41.1
 # renovate: datasource=github-releases depName=jdx/mise
 ARG MISE_VERSION=2026.10.17
 
@@ -31,7 +31,7 @@ RUN apt-get update \
 
 # Claude Code CLI, latest apt channel (stable lags too far for current models).
 # A system path so the home-volume mount can't shadow it. Renovate bumps the pin.
-ARG CLAUDE_CODE_VERSION=2.1.306-1
+ARG CLAUDE_CODE_VERSION=2.1.307-1
 RUN install -d -m 0755 /etc/apt/keyrings \
   && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
        -o /etc/apt/keyrings/claude-code.asc \
