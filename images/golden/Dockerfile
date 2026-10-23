@@ -19,7 +19,7 @@ ARG AGE_VERSION=1.3.2
 # renovate: datasource=custom.onepassword-cli depName=op
 ARG OP_VERSION=2.41.1
 # renovate: datasource=github-releases depName=jdx/mise
-ARG MISE_VERSION=2026.10.17
+ARG MISE_VERSION=2026.10.18
 
 USER root
 
