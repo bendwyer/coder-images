@@ -11,7 +11,7 @@ ARG TARGETARCH
 # renovate: datasource=github-releases depName=cli/cli
 ARG GH_VERSION=2.103.3
 # renovate: datasource=github-releases depName=mikefarah/yq
-ARG YQ_VERSION=4.54.2
+ARG YQ_VERSION=4.54.3
 # renovate: datasource=github-releases depName=getsops/sops
 ARG SOPS_VERSION=3.13.3
 # renovate: datasource=github-releases depName=FiloSottile/age
