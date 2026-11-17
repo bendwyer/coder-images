@@ -4,7 +4,7 @@
 
 # Pinned by digest so a base publish reaches this image through a
 # Renovate bump, not by whichever base happened to be current at build time.
-FROM ghcr.io/bendwyer/coder-images/base:2026.11.9@sha256:d19645da14779942808ad597bf645aee454b788e64b44b2dbd087b994c0bb1ab
+FROM ghcr.io/bendwyer/coder-images/base:2026.11.16@sha256:d19645da14779942808ad597bf645aee454b788e64b44b2dbd087b994c0bb1ab
 
 ARG TARGETARCH
 
@@ -31,7 +31,7 @@ RUN apt-get update \
 
 # Claude Code CLI, latest apt channel (stable lags too far for current models).
 # A system path so the home-volume mount can't shadow it. Renovate bumps the pin.
-ARG CLAUDE_CODE_VERSION=2.1.325-1
+ARG CLAUDE_CODE_VERSION=2.1.326-1
 RUN install -d -m 0755 /etc/apt/keyrings \
   && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
        -o /etc/apt/keyrings/claude-code.asc \
